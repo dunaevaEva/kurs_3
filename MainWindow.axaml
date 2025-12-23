@@ -1,0 +1,107 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="800"
+        xmlns:vm="using:AvApp1.ViewModel"
+        xmlns:controls="clr-namespace:AvApp1.Controls"
+        x:DataType="vm:MainViewModel"
+        x:Class="AvApp1.MainWindow"
+        Title="Анализатор CSV Данных" >
+    
+    <Grid RowDefinitions="Auto, *, Auto">
+        <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
+            <Menu Height="30">
+                <MenuItem Header="Файл">
+                    <MenuItem Header="Новый проект" Command="{Binding NewProjectCommand}" />
+                    
+                    <MenuItem Header="Открыть проект..." Command="{Binding LoadProjectCommand}" />
+                    
+                    <MenuItem Header="Сохранить" Command="{Binding SaveProjectCommand}" />
+                    <MenuItem Header="Сохранить как..." Command="{Binding SaveAsCommand}" />
+                    <Separator />
+                    <MenuItem Header="Выход" Command="{Binding ExitCommand}" />
+                </MenuItem>
+                <MenuItem Header="Данные">
+                    <MenuItem Header="Загрузить CSV..." Command="{Binding LoadCsvCommand}" />
+                    <MenuItem Header="Настройки графика" Command="{Binding SetUpChartCommand}" />
+                </MenuItem>
+            </Menu>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*, 350">
+            
+            <Border Grid.Column="0" Margin="10" Background="White" 
+                    BorderBrush="Gray" BorderThickness="1" CornerRadius="4">
+                
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                              VerticalScrollBarVisibility="Auto">
+                    
+                    <controls:ChartView 
+                        x:Name="MyChartControl" 
+                        Items="{Binding ChartData}" 
+                        ChartType="{Binding CurrentProject.ChartSettings.ChartType}"
+                        Width="{Binding CurrentProject.ChartSettings.Width}"
+                        Height="{Binding CurrentProject.ChartSettings.Height}"
+    
+                        ChartTitle="{Binding CurrentProject.ChartSettings.ChartTitle}"
+                        TitleAlignment="{Binding CurrentProject.ChartSettings.TitleAlignment}"
+    
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+                        
+                </ScrollViewer>
+            </Border>
+
+            <Grid Grid.Column="1" RowDefinitions="Auto, Auto, *, Auto" Margin="10">
+                
+                <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                    <TextBlock Text="Источник данных (Колонка):" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding AvailableKeys}"
+                              SelectedItem="{Binding SelectedChartKey}"
+                              HorizontalAlignment="Stretch"
+                              PlaceholderText="Выберите колонку CSV..."/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" Text="Статистика и Легенда:" FontWeight="Bold" Margin="0,0,0,5"/>
+                
+                <DataGrid Grid.Row="2" 
+                          ItemsSource="{Binding ChartData}"
+                          SelectedItem="{Binding SelectedChartItem}"
+                          AutoGenerateColumns="False"
+                          CanUserSortColumns="True"
+                          GridLinesVisibility="All"
+                          BorderThickness="1" BorderBrush="LightGray">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Категория" Binding="{Binding Label}" Width="*"/>
+                        <DataGridTextColumn Header="Кол-во" Binding="{Binding Value}" IsReadOnly="True" Width="Auto"/>
+                        <DataGridTextColumn Header="Цвет (Hex)" Binding="{Binding Color}" Width="90"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel Grid.Row="3" Spacing="5" Margin="0,10,0,0">
+                    <Button Content="Удалить выбранную строку" 
+                            Command="{Binding RemoveLabelCommand}" 
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    
+                    <Button Content="Настройки (Top N / Тип)" 
+                            Command="{Binding SetUpChartCommand}" 
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    
+                    <Button Content="Экспорт в PNG" 
+                            CommandParameter="{Binding ElementName=MyChartControl}"
+                            Command="{Binding ExportCommand}" 
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <Border Grid.Row="2" Background="#F0F0F0" Height="25" VerticalAlignment="Bottom">
+            <TextBlock Text="{Binding OutputMessage}" 
+                       Margin="10,0" 
+                       VerticalAlignment="Center" 
+                       FontSize="12" 
+                       Foreground="DimGray"/>
+        </Border>
+    </Grid>
+</Window>

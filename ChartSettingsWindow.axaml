@@ -1,0 +1,72 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:vm="using:AvApp1.ViewModel"
+        
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="650"
+        x:Class="AvApp1.Views.ChartSettingsWindow"
+        
+        x:DataType="vm:ChartSettingsViewModel"
+        
+        Title="Настройки графика"
+        Width="450" Height="650"
+        WindowStartupLocation="CenterOwner"
+        CanResize="True">
+    <Grid RowDefinitions="*, Auto" Margin="15">
+        
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Padding="0,0,10,0">
+            <StackPanel Spacing="10">
+                
+                <TextBlock Text="Источник данных (Ключ):" FontWeight="Bold"/>
+                <ComboBox ItemsSource="{Binding AvailableKeys}" 
+                          SelectedItem="{Binding TempSettings.SelectedKey}" 
+                          HorizontalAlignment="Stretch"/>
+
+                <TextBlock Text="Количество элементов (Top N):" FontWeight="Bold"/>
+                <NumericUpDown Value="{Binding TempSettings.TopN}" Minimum="1" Maximum="1000"/>
+
+                <Separator Background="LightGray" Height="1"/>
+
+                <TextBlock Text="Заголовок графика:" FontWeight="Bold"/>
+                <TextBox Text="{Binding ChartTitle}" Watermark="Например: Продажи за год"/>
+
+                <TextBlock Text="Положение заголовка:" FontWeight="Bold"/>
+                <ComboBox ItemsSource="{Binding AlignmentOptions}" 
+                          SelectedItem="{Binding TitleAlignment}" 
+                          HorizontalAlignment="Stretch"/>
+
+                <Separator Background="LightGray" Height="1"/>
+
+                <TextBlock Text="Тип графика:" FontWeight="Bold"/>
+                <ComboBox SelectedItem="{Binding TempSettings.ChartType}" HorizontalAlignment="Stretch">
+                    <ComboBox.Items>
+                        <x:String>Bar</x:String>
+                        <x:String>Pie</x:String>
+                    </ComboBox.Items>
+                </ComboBox>
+
+                <TextBlock Text="Размер графика (px):" FontWeight="Bold"/>
+                <Grid ColumnDefinitions="*, 10, *">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Ширина:" FontSize="12"/>
+                        <NumericUpDown Value="{Binding TempSettings.Width}" Minimum="100" Maximum="5000"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Высота:" FontSize="12"/>
+                        <NumericUpDown Value="{Binding TempSettings.Height}" Minimum="100" Maximum="5000"/>
+                    </StackPanel>
+                </Grid>
+                
+                <Panel Height="20"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,15,0,0">
+            <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100" HorizontalContentAlignment="Center"/>
+            <Button Content="Применить" Command="{Binding ApplyCommand}" Width="100" HorizontalContentAlignment="Center" Classes="accent"/>
+        </StackPanel>
+        
+    </Grid>
+</Window>

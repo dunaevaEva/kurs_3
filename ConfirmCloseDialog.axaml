@@ -1,0 +1,19 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="AvApp1.Views.ConfirmCloseDialog"
+        Width="350" Height="100"
+        WindowStartupLocation="CenterOwner"
+        Title="Подтверждение">
+
+    <StackPanel Margin="12" Spacing="10">
+        <TextBlock Text="Сохранить изменения в проекте?"  HorizontalAlignment="Center"/>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="8">
+            <Button Content="Сохранить" Click="Save_Click"/>
+            <Button Content="Не сохранять" Click="DontSave_Click"/>
+            <Button Content="Отмена" Click="Cancel_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
